@@ -181,6 +181,33 @@ rough edges are visible rather than silently smoothed over.
 
 ---
 
+## Entering data on the board
+
+The workbook stays the database, but nothing has to be typed into it first. **Data entry** in the header
+turns every row into a form: click a project to change its platform, sheet, players, promotion status,
+comment or its monthly bets; **+ Project** and **+ Placement** add rows; **Delete row** removes one. Every
+counter, split, trend and activity verdict is derived, so it all recomputes from what was typed.
+
+Entries live **in the editor's own browser** — this is a static page, there is no server to save to and
+nobody else sees them until the file moves. The **Changes** button is that move, and it goes both ways:
+
+- **Board → file.** Download an `.xlsx` carrying the same six sheets as Partners List (Active Partners,
+  Low Activity, No Activity, Network Promotion offer, Promotional Discounts, Source), or the
+  `partners.json` this page reads. Drop the JSON into `data/`, run `python build.py`, push — the page
+  now holds the entries for everyone.
+- **File → board.** Point **Choose a file…** at a newer Partners List. It is parsed in the page, becomes
+  the new base for that browser, and anything already typed stays on top of it.
+
+Each entry is stored as the *difference* from the file, field by field, so the Changes list names exactly
+what was touched, any single entry can be undone, and a newer workbook does not wipe unsent work.
+
+Both the writer and the reader for `.xlsx` are written into the page — no library, no CDN, nothing
+uploaded. Reading a workbook needs `DecompressionStream`, which Chrome and Edge have; a browser without it
+gets a clear message and can still import `partners.json`.
+
+When the file moves to Google Sheets, the same forms point at the sheet instead of the browser: the entry
+side does not change, only where it saves. `scripts/sheets_to_json.py` is the other half of that already.
+
 ## What is on the page
 
 **Partners & projects** — activity units, what the bets say, bets per month

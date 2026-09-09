@@ -1,16 +1,8 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Partnership Desk</title>
-<style>
-  :root{color-scheme:light}
-  *{box-sizing:border-box}
-  body{margin:0}
-  img{max-width:100%}
-  [hidden]{display:none!important}
-</style>
+<style>:root{color-scheme:light}*{box-sizing:border-box}body{margin:0}
+  img{max-width:100%}[hidden]{display:none!important}</style>
 <title>Partnership Desk</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&display=swap">
 <style>
@@ -544,9 +536,99 @@ td.warn{color:var(--c-low)}
 .pie-legend b{margin-left:auto; font-variant-numeric:tabular-nums; color:var(--muted); font-weight:500}
 .pie-legend em{font-style:normal; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
 @media (max-width:900px){ .pierow{grid-template-columns:1fr} }
+
+/* ---------- data entry ---------- */
+.ed-bar{display:flex; align-items:center; gap:6px; flex-wrap:wrap}
+.ed-toggle{appearance:none; display:inline-flex; align-items:center; gap:7px; cursor:pointer;
+  background:var(--surface); border:1px solid var(--line-strong); border-radius:5px;
+  padding:5px 10px; font-size:12.5px; color:var(--ink-2)}
+.ed-toggle:hover{border-color:var(--accent); color:var(--accent-2)}
+.ed-toggle[aria-pressed="true"]{background:var(--accent-soft);
+  border-color:color-mix(in srgb,var(--accent) 42%,transparent); color:var(--accent-2)}
+.ed-dot{width:7px; height:7px; border-radius:50%; background:var(--line-strong)}
+.ed-toggle[aria-pressed="true"] .ed-dot{background:var(--c-active)}
+.ed-mini{font-size:12.5px; padding:5px 10px}
+.ed-mini b{font-variant-numeric:tabular-nums; font-size:11px; padding:0 5px; border-radius:8px;
+  background:var(--surface-2); color:var(--muted); margin-left:4px}
+.ed-mini.has b{background:var(--c-low); color:#fff}
+.ed-note{margin:10px 0 -4px; padding:9px 12px; border-radius:6px; font-size:12.5px; line-height:1.5;
+  background:var(--accent-soft); color:var(--accent-2);
+  border:1px solid color-mix(in srgb,var(--accent) 30%,transparent)}
+.ed-add{border-color:var(--accent); color:var(--accent-2); font-weight:600}
+body:not(.editing) .ed-add{display:none}
+body.editing #a-table tbody tr[data-row],
+body.editing #o-table tbody tr[data-row],
+body.editing #l-table tbody tr[data-disc],
+body.editing .sub-r[data-row]{cursor:pointer}
+body.editing #a-table tbody tr[data-row]:hover,
+body.editing #o-table tbody tr[data-row]:hover,
+body.editing #l-table tbody tr[data-disc]:hover,
+body.editing .sub-r[data-row]:hover{background:var(--accent-soft)}
+.ed-flash{position:fixed; left:50%; bottom:22px; transform:translateX(-50%); z-index:80;
+  background:var(--ink); color:var(--bg); padding:8px 14px; border-radius:6px;
+  font-size:12.5px; box-shadow:var(--shadow)}
+
+/* the dialog */
+.ed-modal{position:fixed; inset:0; z-index:90; display:flex; align-items:center; justify-content:center; padding:20px}
+.ed-back{position:absolute; inset:0; background:rgba(16,26,25,.42)}
+.ed-box{position:relative; width:min(780px,100%); max-height:88vh; display:flex; flex-direction:column;
+  background:var(--surface); border:1px solid var(--line); border-radius:10px; box-shadow:var(--shadow)}
+.ed-box>header{display:flex; align-items:center; gap:10px; padding:14px 18px; border-bottom:1px solid var(--line)}
+.ed-box>header h2{margin:0; font-size:15px; letter-spacing:-.01em}
+.ed-x{margin-left:auto; appearance:none; background:none; border:0; font-size:20px; line-height:1;
+  color:var(--muted); cursor:pointer; padding:0 2px}
+.ed-x:hover{color:var(--ink)}
+.ed-body{padding:16px 18px; overflow:auto}
+.ed-box>footer{display:flex; align-items:center; gap:8px; padding:12px 18px; border-top:1px solid var(--line)}
+.ed-sp{flex:1}
+.ed-msg{font-size:12.5px; color:var(--muted)}
+.ed-msg.warn{color:var(--c-none)}
+.btn.primary{background:var(--accent); border-color:var(--accent); color:#fff}
+.btn.primary:hover{background:var(--accent-2); border-color:var(--accent-2); color:#fff}
+.btn.danger{color:var(--c-none); border-color:color-mix(in srgb,var(--c-none) 45%,transparent)}
+.btn.danger:hover{background:var(--c-none); border-color:var(--c-none); color:#fff}
+.ed-del{color:var(--c-none); border-color:color-mix(in srgb,var(--c-none) 45%,transparent)}
+.ed-del:hover{background:var(--c-none); border-color:var(--c-none); color:#fff}
+.lnk{appearance:none; background:none; border:0; padding:0; cursor:pointer;
+  font-size:12px; color:var(--accent-2); text-decoration:underline; text-underline-offset:2px}
+.lnk:hover{color:var(--accent)}
+
+/* form bits */
+.ed-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px 18px}
+.ed-f{display:flex; flex-direction:column; gap:4px; margin-bottom:12px}
+.ed-f>span{font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted)}
+.ed-f>em{font-size:11.5px; color:var(--muted); font-style:normal; line-height:1.4}
+.ed-f input, .ed-f select, .ed-f textarea{
+  background:var(--surface); border:1px solid var(--line-strong); border-radius:5px;
+  padding:6px 9px; font-size:13px; color:var(--ink); font-family:inherit; width:100%}
+.ed-f input:focus, .ed-f select:focus, .ed-f textarea:focus{outline:2px solid var(--accent-soft); border-color:var(--accent)}
+.ed-f input[readonly]{background:var(--surface-2); color:var(--ink-2)}
+.ed-sec{margin:14px 0 8px; font-size:11px; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--muted); border-top:1px solid var(--line); padding-top:12px}
+.ed-months{display:grid; grid-template-columns:repeat(auto-fit,minmax(112px,1fr)); gap:8px}
+.ed-m{display:flex; flex-direction:column; gap:3px}
+.ed-m span{font-size:11px; color:var(--muted)}
+.ed-m input{background:var(--surface); border:1px solid var(--line-strong); border-radius:5px;
+  padding:5px 7px; font-size:12px; color:var(--ink); width:100%;
+  font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono",ui-monospace,monospace}
+.ed-hint{margin:10px 0 0; font-size:11.5px; line-height:1.55; color:var(--muted)}
+.ed-src{margin:0 0 12px; font-size:12.5px; color:var(--ink-2)}
+.ed-btns{display:flex; gap:8px; flex-wrap:wrap}
+.ed-btns label.btn{display:inline-block}
+.ed-list{border:1px solid var(--line); border-radius:7px; overflow:hidden}
+.ed-item{display:flex; align-items:center; gap:10px; padding:8px 11px; border-bottom:1px solid var(--line)}
+.ed-item:last-child{border-bottom:0}
+.ed-tag{width:6px; height:22px; border-radius:3px; background:var(--c-sent); flex:none}
+.ed-tag[data-t="add"], .ed-tag[data-t="dadd"]{background:var(--c-active)}
+.ed-tag[data-t="del"], .ed-tag[data-t="ddel"]{background:var(--c-none)}
+.ed-what{display:flex; flex-direction:column; line-height:1.3; flex:1; min-width:0}
+.ed-what b{font-size:13px; font-weight:600}
+.ed-what em{font-size:11.5px; font-style:normal; color:var(--muted)}
+@media (max-width:640px){ .ed-grid{grid-template-columns:1fr} }
+.doc-next{padding:10px 12px; border-left:3px solid var(--accent);
+  background:var(--surface-2); border-radius:0 6px 6px 0; color:var(--ink-2)}
 </style>
-</head>
-<body>
+</head><body>
 
 <header class="mast">
   <div class="mast-in">
@@ -787,6 +869,29 @@ td.warn{color:var(--c-low)}
         September 2026, and 916 of the 918 rows join onto them. <b>Promotional Discounts</b> supplies the
         placement deals.</p>
 
+        <h2>Entering data on the board</h2>
+        <p>The workbook is still the database, but nothing has to be typed into it first. Switch
+        <b>Data entry</b> on in the header and every row becomes editable: click a project to change its
+        platform, sheet, players, promotion status, comment or its monthly bets; use <b>+ Project</b> and
+        <b>+ Placement</b> to add rows. The counters, the split, the trend and the activity verdict all
+        recompute from what you typed, because they are derived, never stored.</p>
+        <p>Entries are kept <b>in your own browser</b>, not on a server — nobody else sees them until the file
+        moves. That is what the <b>Changes</b> button is for, and it works both ways:</p>
+        <ul>
+          <li><b>Board → file.</b> Download an <b>.xlsx</b> with the same six sheets as Partners List, or the
+          <b>partners.json</b> the published page reads. The .xlsx replaces the workbook or gets pasted into
+          it; the .json goes into <code>data/</code> in the repository and the page rebuilds itself.</li>
+          <li><b>File → board.</b> Point <b>Choose a file…</b> at a newer Partners List and it is read here,
+          in the page — the workbook becomes the new base and anything you had already typed stays on top
+          of it. Nothing is uploaded anywhere.</li>
+        </ul>
+        <p>Each entry is recorded as the <em>difference</em> from the file, one field at a time, so the
+        <b>Changes</b> list names exactly what was touched and any single entry can be undone. When a newer
+        workbook arrives, your entries reapply to it rather than being overwritten by it.</p>
+        <p class="doc-next">The next step, when the file moves to Google Sheets, is to replace this browser
+        store with the sheet itself: the same forms, writing straight to the table, visible to everyone.
+        The forms do not change — only where they save.</p>
+
         <h2>Data checks</h2>
         <p>Four things the file disagrees with itself about. The first is corrected here; the rest are reported
         as they are:</p>
@@ -883,8 +988,198 @@ td.warn{color:var(--c-low)}
 
 </div>
 <div id="tip" role="status" aria-live="polite"></div>
-
 <script type="application/json" id="pdata">__PDATA__</script>
+<script>
+/* ==========================================================================
+   Data entry — the store.
+
+   This runs BEFORE the dashboard reads #pdata, so everything downstream sees
+   one dataset and needs no knowledge that editing exists.
+
+   Three layers, applied in order:
+     1. built-in    the JSON shipped inside the page
+     2. base        a workbook imported through the board, if there is one
+     3. edits       everything typed into the board since then
+
+   Layers 2 and 3 live in this browser only. Nothing is sent anywhere. The way
+   an edit reaches the real file — and the way a newer file reaches the board —
+   is the import/export pair on the Data entry drawer.
+   ========================================================================== */
+(function(){
+"use strict";
+
+const K_EDITS = "pd-edits-v1";
+const K_BASE  = "pd-base-v1";
+const K_UI    = "pd-ui-v1";
+
+const store = {
+  get(k, dflt){ try { const s = localStorage.getItem(k); return s ? JSON.parse(s) : dflt; }
+                catch(e){ return dflt; } },
+  put(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); return true; }
+             catch(e){ return false; } },
+  drop(k){ try { localStorage.removeItem(k); } catch(e){} },
+};
+
+const EMPTY = () => ({v:1, rows:{}, add:[], del:[], disc:{add:[], edit:{}, del:[]}, at:0});
+const rowKey = (p, j) => String(p||"").trim() + "‣" + String(j||"").trim();
+const discKey = d => [d.p, d.j, d.g, d.s].map(x=>String(x||"").trim()).join("‣");
+
+/* ---------- derived numbers, recomputed whenever months change ---------- */
+function derive(r){
+  const vals = r.m.filter(v => v !== null && v !== undefined);
+  r.tb = Math.round(vals.reduce((a,b)=>a+(+b||0), 0));
+  r.pk = vals.length ? Math.round(Math.max(...vals.map(v=>+v||0))) : 0;
+  r.mw = vals.filter(v => (+v||0) > 0).length;
+  for(let i = r.m.length-1; i >= 0; i--){
+    if(r.m[i] !== null && r.m[i] !== undefined){ r.ja = Math.round(+r.m[i]||0); break; }
+  }
+  if(r.ja === undefined) r.ja = 0;
+  return r;
+}
+
+function blankRow(labels){
+  return {p:"", pl:"", j:"", b:"active", o:"", c:"",
+          m:labels.map(()=>0), tb:0, tp:0, pk:0, mw:0, ja:0, amt:0, ggr:0, src:0};
+}
+
+/* ---------- apply the edit layer to a dataset ---------- */
+function apply(data, edits){
+  const labels = data.labels;
+  const out = {labels, rows:[], disc:[], issues: data.issues ? data.issues.slice() : []};
+  const dead = new Set(edits.del || []);
+
+  data.rows.forEach(src=>{
+    const k = rowKey(src.p, src.j);
+    if(dead.has(k)) return;
+    const patch = edits.rows[k];
+    if(!patch){ out.rows.push(src); return; }
+    const r = Object.assign({}, src, patch, {m: src.m.slice()});
+    if(patch.m){
+      Object.keys(patch.m).forEach(lab=>{
+        const i = labels.indexOf(lab);
+        if(i >= 0) r.m[i] = patch.m[lab] === null ? null : +patch.m[lab];
+      });
+      derive(r);
+    }
+    r.edited = true;
+    out.rows.push(r);
+  });
+
+  (edits.add || []).forEach(a=>{
+    const k = rowKey(a.p, a.j);
+    if(dead.has(k)) return;
+    const r = Object.assign(blankRow(labels), a, {m: blankRow(labels).m});
+    const months = Object.assign({}, a.m || {}, (edits.rows[k] || {}).m || {});
+    Object.keys(months).forEach(lab=>{
+      const i = labels.indexOf(lab);
+      if(i >= 0) r.m[i] = months[lab] === null ? null : +months[lab];
+    });
+    Object.assign(r, edits.rows[k] || {}, {m: r.m});
+    derive(r);
+    r.added = true;
+    out.rows.push(r);
+  });
+
+  const dDead = new Set((edits.disc && edits.disc.del) || []);
+  (data.disc || []).forEach(d=>{
+    const k = discKey(d);
+    if(dDead.has(k)) return;
+    const patch = (edits.disc && edits.disc.edit && edits.disc.edit[k]) || null;
+    out.disc.push(patch ? Object.assign({}, d, patch, {edited:true}) : d);
+  });
+  ((edits.disc && edits.disc.add) || []).forEach(d=>{
+    if(!dDead.has(discKey(d))) out.disc.push(Object.assign({added:true}, d));
+  });
+
+  return out;
+}
+
+/* ---------- assemble and hand the result to the dashboard ---------- */
+const node = document.getElementById("pdata");
+const builtIn = JSON.parse(node.textContent);
+const imported = store.get(K_BASE, null);
+const base = (imported && imported.data && imported.data.rows) ? imported.data : builtIn;
+let edits = store.get(K_EDITS, null);
+if(!edits || edits.v !== 1) edits = EMPTY();
+
+let merged;
+try {
+  merged = apply(base, edits);
+} catch(e){
+  console.error("Could not apply saved changes — showing the file as it is.", e);
+  merged = base;
+  edits = EMPTY();
+}
+node.textContent = JSON.stringify(merged);
+
+/* ---------- what the forms talk to ---------- */
+window.PD = {
+  base, builtIn, merged, edits,
+  importedAs: imported ? {name: imported.name, at: imported.at, rows: imported.data.rows.length} : null,
+  labels: base.labels,
+  rowKey, discKey, derive, blankRow,
+  apply,
+
+  count(){
+    const e = this.edits;
+    return Object.keys(e.rows).length + e.add.length + e.del.length +
+           e.disc.add.length + Object.keys(e.disc.edit).length + e.disc.del.length;
+  },
+  save(){
+    this.edits.at = Date.now();
+    if(!store.put(K_EDITS, this.edits)){
+      alert("This browser will not let the page save — check that site data is not blocked.\n" +
+            "Export your changes now so they are not lost.");
+      return false;
+    }
+    return true;
+  },
+  /* every form ends here: persist, remember where the user was, reload */
+  commit(ui){
+    if(!this.save()) return;
+    try { sessionStorage.setItem(K_UI, JSON.stringify(ui || this.ui())); } catch(e){}
+    location.reload();
+  },
+  reset(){
+    this.edits = EMPTY();
+    store.drop(K_EDITS);
+    try { sessionStorage.setItem(K_UI, JSON.stringify(this.ui())); } catch(e){}
+    location.reload();
+  },
+  setBase(name, data){
+    store.put(K_BASE, {name, at: Date.now(), data});
+    try { sessionStorage.setItem(K_UI, JSON.stringify(this.ui())); } catch(e){}
+    location.reload();
+  },
+  clearBase(){
+    store.drop(K_BASE);
+    location.reload();
+  },
+
+  /* remember the tab, the sheet and the filters across the save-reload */
+  ui(){
+    const val = id => { const e = document.getElementById(id); return e ? e.value : ""; };
+    const sel = document.querySelector('#a-scope .seg-b[aria-selected="true"]');
+    const tab = document.querySelector('.tab[aria-selected="true"]');
+    const view = document.querySelector('#a-view .seg-b[aria-selected="true"]');
+    return {
+      tab: tab ? tab.dataset.tab : "a",
+      sheet: sel ? sel.dataset.sheet : "active",
+      view: view ? view.dataset.view : "units",
+      f: {q:val("a-q"), act:val("a-act"), pt:val("a-pt"), pl:val("a-pl"), proj:val("a-proj")},
+      o: {q:val("o-q"), st:val("o-st"), pt:val("o-pt")},
+      y: window.scrollY,
+    };
+  },
+  takeUI(){
+    let s = null;
+    try { s = JSON.parse(sessionStorage.getItem(K_UI) || "null"); sessionStorage.removeItem(K_UI); }
+    catch(e){}
+    return s;
+  },
+};
+})();
+</script>
 <script>
 (function(){
 "use strict";
@@ -910,6 +1205,8 @@ const projects = RAW.rows.map((r,i)=>{
   for(let k = r.m.length-1; k >= 0; k--){ if(r.m[k] && r.m[k] > 0){ last = k; break; } }
   return {
     id:"J"+i, partner:r.p, platform:r.pl || "—", name:r.j, sheet:r.b,
+    rowKey: String(r.p||"").trim() + "\u2023" + String(r.j||"").trim(),
+    edited: !!r.edited, added: !!r.added,
     offer:r.o || "", comms:r.c || "",
     m:r.m, lastIdx:last, since: last < 0 ? null : CUR - last,
     tb:r.tb, tp:r.tp, pk:r.pk, mw:r.mw, ja:r.ja, amt:r.amt, ggr:r.ggr,
@@ -960,6 +1257,8 @@ projects.forEach(p=>{
 const dmy = s => { const [d,m,y] = s.split("."); return new Date(+y, +m-1, +d); };
 const placements = RAW.disc.map((d,i)=>({
   id:"PL"+i, partner:d.p, project:d.j, game:d.g, pos:d.pos,
+  key: [d.p, d.j, d.g, d.s].map(x=>String(x||"").trim()).join("\u2023"),
+  added: !!d.added, edited: !!d.edited,
   disc:d.d, start:dmy(d.s), end:dmy(d.e),
   left: Math.round((dmy(d.e) - TODAY)/DAY),
 }));
@@ -1378,7 +1677,7 @@ function renderTabTable(t, ps, js, pls){
       <tr class="subwrap"${open?"":" hidden"}><td colspan="${span}">
         <div class="subtable">
           <div class="sub-h"><span>Project</span><span>Partner</span><span>Bets say</span><span class="r">Bets 9 mo</span><span class="r">Players</span><span>Last bets</span></div>
-          ${kids.map(j=>`<div class="sub-r">
+          ${kids.map(j=>`<div class="sub-r" data-row="${esc(j.rowKey)}">
             <span class="strong">${esc(j.name)}</span><span>${esc(j.partner)}</span><span>${pillOf(j.bucket)}</span>
             <span class="r num">${money(j.tb)}</span><span class="r num">${money(j.tp)}</span><span>${j.lastLabel}</span></div>`).join("")}
         </div></td></tr>`;
@@ -1405,7 +1704,7 @@ function renderTabTable(t, ps, js, pls){
       <tr class="subwrap"${open?"":" hidden"}><td colspan="${span}">
         <div class="subtable">
           <div class="sub-h"><span>Project</span><span>Platform</span><span>Bets say</span><span class="r">Bets 9 mo</span><span class="r">Players</span><span>Last bets</span></div>
-          ${kids.map(j=>`<div class="sub-r">
+          ${kids.map(j=>`<div class="sub-r" data-row="${esc(j.rowKey)}">
             <span class="strong">${esc(j.name)}</span><span>${esc(j.platform)}</span><span>${pillOf(j.bucket)}</span>
             <span class="r num">${money(j.tb)}</span><span class="r num">${money(j.tp)}</span><span>${j.lastLabel}</span></div>`).join("")}
         </div></td></tr>`;
@@ -1416,7 +1715,7 @@ function renderTabTable(t, ps, js, pls){
        them the bets still call active.`;
   } else {
     const rows = sortRows(js, st.jSort);
-    html = rows.slice(0,60).map(j=>`<tr>
+    html = rows.slice(0,60).map(j=>`<tr data-row="${esc(j.rowKey)}">
       <td class="strong">${esc(j.name)}</td><td>${esc(j.partner)}</td><td>${esc(j.platform)}</td>
       <td>${pillOf(j.bucket)}</td>
       <td class="n">${money(j.tb)}</td><td class="n">${money(j.tp)}</td>
@@ -1700,7 +1999,7 @@ function renderPromos(){
     if(typeof x === "string") return x.localeCompare(y)*oSort.dir;
     return ((x||0)-(y||0))*oSort.dir;
   });
-  document.querySelector("#o-table tbody").innerHTML = sorted.slice(0,60).map(p=>`<tr>
+  document.querySelector("#o-table tbody").innerHTML = sorted.slice(0,60).map(p=>`<tr data-row="${esc(p.rowKey)}">
     <td class="strong">${esc(p.name)}</td><td>${esc(p.partner)}</td><td>${esc(p.platform)}</td>
     <td><span class="pill" data-k="${OKEY[statusOf(p)]}"><i></i>${statusOf(p)}</span></td>
     <td>${pillOf(p.bucket)}</td>
@@ -1782,7 +2081,7 @@ function renderPlacements(){
     if(typeof x === "string") return x.localeCompare(y)*lSort.dir;
     return ((x||0)-(y||0))*lSort.dir;
   });
-  document.querySelector("#l-table tbody").innerHTML = sorted.map(p=>`<tr>
+  document.querySelector("#l-table tbody").innerHTML = sorted.map(p=>`<tr data-disc="${esc(p.key)}">
     <td class="strong">${esc(p.game)}</td><td>${esc(p.partner)}</td><td>${esc(p.project)}</td>
     <td><span class="pill" data-k="approved"><i></i>${esc(p.pos)}</span></td>
     <td class="n">${Math.round(p.disc*100)}%</td>
@@ -1798,6 +2097,17 @@ function renderPlacements(){
 
 /* ---------- wiring ---------- */
 const redraw = () => { recompute(); TABS.forEach(renderTab); renderPromos(); renderPlacements(); };
+if(window.PD){
+  window.PD.app = {
+    projects, placements, LABELS, OSTATUS, SHEET,
+    partnerNames: () => uniq(projects.map(p=>p.partner)),
+    platformNames: () => uniq(projects.map(p=>p.platform).filter(v=>v !== "\u2014")),
+    projectNames: pt => uniq(projects.filter(p=>!pt || p.partner === pt).map(p=>p.name)),
+    gameNames: () => uniq(placements.map(p=>p.game)),
+    find: k => projects.find(p=>p.rowKey === k) || null,
+    findDisc: k => placements.find(p=>p.key === k) || null,
+  };
+}
 ["o-q","o-st","o-pt","o-pl","o-act","o-only"].forEach(id=>{
   const el = document.getElementById(id);
   el.addEventListener(el.tagName === "INPUT" && el.type === "text" ? "input" : "change", renderPromos);
@@ -2154,7 +2464,749 @@ matchMedia("(prefers-color-scheme: dark)").addEventListener("change", redraw);
     );
   })();
 })();
+/* ---------- data entry: every field on the board is writable ---------- */
+(function(){
+  if(!window.PD || !window.PD.app) return;
+  const PD = window.PD, A = PD.app, L = PD.labels;
 
+  const esc = s => String(s == null ? "" : s)
+    .replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const el = id => document.getElementById(id);
+  const mShort = s => new Date(+s.slice(0,4), +s.slice(5,7)-1, 1)
+    .toLocaleDateString("en-GB", {month:"short", year:"2-digit"});
+  const num = v => { const n = Number(String(v).replace(/[\s,]/g, "")); return isNaN(n) ? 0 : n; };
+  const LS = {
+    get(k, d){ try { return localStorage.getItem(k) ?? d; } catch(e){ return d; } },
+    set(k, v){ try { localStorage.setItem(k, v); } catch(e){} },
+  };
+
+  let on = LS.get("pd-edit", "0") === "1";
+
+  /* ============ 0. put the user back where they were ============ */
+  const ui = PD.takeUI();
+  if(ui){
+    const click = sel => { const b = document.querySelector(sel); if(b) b.click(); };
+    if(ui.sheet && ui.sheet !== "active") click(`#a-scope .seg-b[data-sheet="${ui.sheet}"]`);
+    if(ui.view) click(`#a-view .seg-b[data-view="${ui.view}"]`);
+    Object.keys(ui.f || {}).forEach(k=>{
+      const e = el("a-" + k);
+      if(e && ui.f[k]){ e.value = ui.f[k]; e.dispatchEvent(new Event(e.tagName === "SELECT" ? "change" : "input")); }
+    });
+    Object.keys(ui.o || {}).forEach(k=>{
+      const e = el("o-" + k);
+      if(e && ui.o[k]){ e.value = ui.o[k]; e.dispatchEvent(new Event(e.tagName === "SELECT" ? "change" : "input")); }
+    });
+    if(ui.tab && ui.tab !== "a") click(`.tab[data-tab="${ui.tab}"]`);
+    if(ui.y) setTimeout(()=>window.scrollTo(0, ui.y), 30);
+  }
+
+  /* ============ 1. masthead ============ */
+  const bar = document.createElement("div");
+  bar.className = "ed-bar";
+  bar.innerHTML =
+    `<button class="ed-toggle" id="ed-toggle" aria-pressed="${on}"><span class="ed-dot"></span>
+       <span id="ed-toggle-t">Data entry</span></button>
+     <button class="btn ed-mini" id="ed-changes">Changes <b id="ed-n">0</b></button>`;
+  document.querySelector(".mast-top .sync").prepend(bar);
+
+  const flash = document.createElement("div");
+  flash.className = "ed-flash"; flash.hidden = true;
+  document.body.appendChild(flash);
+  const say = msg => {
+    flash.textContent = msg; flash.hidden = false;
+    clearTimeout(say.t); say.t = setTimeout(()=>{ flash.hidden = true; }, 3200);
+  };
+
+  const countBadge = () => {
+    const n = PD.count();
+    el("ed-n").textContent = n;
+    el("ed-changes").classList.toggle("has", n > 0);
+  };
+
+  /* ============ 2. edit mode ============ */
+  const addBtn = (host, id, label) => {
+    if(!host || el(id)) return;
+    const b = document.createElement("button");
+    b.className = "btn ed-add"; b.id = id; b.textContent = label;
+    host.prepend(b);
+  };
+  addBtn(document.querySelector("#panel-a .f-actions"), "ed-add-row", "+ Project");
+  addBtn(document.querySelector("#panel-placements .f-actions"), "ed-add-disc", "+ Placement");
+
+  const banner = document.createElement("div");
+  banner.className = "ed-note"; banner.hidden = true;
+  banner.innerHTML =
+    `Editing is on. <b>Click any project row</b> to change its fields or type its monthly bets;
+     use <b>+ Project</b> and <b>+ Placement</b> to add rows, and the status cell on the
+     Promotion offers tab to set an offer. Everything is kept in this browser —
+     open <b>Changes</b> to send it back to the file.`;
+  document.querySelector(".wrap").prepend(banner);
+
+  function paint(){
+    document.body.classList.toggle("editing", on);
+    el("ed-toggle").setAttribute("aria-pressed", String(on));
+    el("ed-toggle-t").textContent = on ? "Data entry on" : "Data entry";
+    banner.hidden = !on;
+    countBadge();
+  }
+  el("ed-toggle").addEventListener("click", ()=>{
+    on = !on; LS.set("pd-edit", on ? "1" : "0"); paint();
+  });
+
+  /* ============ 3. the dialog ============ */
+  const dlg = document.createElement("div");
+  dlg.className = "ed-modal"; dlg.hidden = true;
+  dlg.innerHTML = `<div class="ed-back"></div>
+    <div class="ed-box" role="dialog" aria-modal="true" aria-labelledby="ed-title">
+      <header><h2 id="ed-title"></h2><button class="ed-x" aria-label="Close">×</button></header>
+      <div class="ed-body"></div>
+      <footer><span class="ed-msg"></span><span class="ed-sp"></span>
+        <button class="btn ed-del" hidden>Delete row</button>
+        <button class="btn" data-act="cancel">Cancel</button>
+        <button class="btn primary" data-act="save">Save</button></footer>
+    </div>`;
+  document.body.appendChild(dlg);
+  const dBody = dlg.querySelector(".ed-body"), dTitle = dlg.querySelector("#ed-title");
+  const dMsg = dlg.querySelector(".ed-msg"), dDel = dlg.querySelector(".ed-del");
+  let onSave = null, onDelete = null;
+
+  function openDlg(title, html, save, del){
+    dTitle.textContent = title; dBody.innerHTML = html; dMsg.textContent = "";
+    onSave = save; onDelete = del || null;
+    dDel.hidden = !del;
+    dlg.hidden = false;
+    const first = dBody.querySelector("input,select,textarea");
+    if(first) setTimeout(()=>first.focus(), 20);
+  }
+  const closeDlg = () => { dlg.hidden = true; onSave = onDelete = null; };
+  dlg.querySelector(".ed-back").addEventListener("click", closeDlg);
+  dlg.querySelector(".ed-x").addEventListener("click", closeDlg);
+  dlg.querySelector('[data-act="cancel"]').addEventListener("click", closeDlg);
+  dlg.querySelector('[data-act="save"]').addEventListener("click", ()=>{ if(onSave) onSave(); });
+  dDel.addEventListener("click", ()=>{ if(onDelete) onDelete(); });
+  document.addEventListener("keydown", e=>{
+    if(e.key === "Escape" && !dlg.hidden) closeDlg();
+    if(e.key === "Enter" && !dlg.hidden && e.target.tagName === "INPUT" && onSave) onSave();
+  });
+  const bad = m => { dMsg.textContent = m; dMsg.className = "ed-msg warn"; };
+
+  const listOf = (id, values) =>
+    `<datalist id="${id}">${values.map(v=>`<option value="${esc(v)}">`).join("")}</datalist>`;
+  const field = (label, inner, note) =>
+    `<label class="ed-f"><span>${label}</span>${inner}${note ? `<em>${note}</em>` : ""}</label>`;
+
+  /* ============ 4. the project row ============ */
+  function rowForm(key){
+    const p = key ? A.find(key) : null;
+    const months = {};
+    if(p) L.forEach((lab,i)=>{ months[lab] = p.m[i]; });
+
+    const html = `
+      <div class="ed-grid">
+        ${field("Partner", `<input id="f-p" list="dl-p" value="${esc(p ? p.partner : "")}" ${p ? "readonly" : ""} placeholder="Softswiss">`,
+                p ? "The partner and project name identify the row and cannot be changed here — delete and add instead." : "Pick an existing one or type a new name.")}
+        ${field("Project", `<input id="f-j" value="${esc(p ? p.name : "")}" ${p ? "readonly" : ""} placeholder="4rabet">`)}
+        ${field("Platform", `<input id="f-pl" list="dl-pl" value="${esc(p && p.platform !== "—" ? p.platform : "")}" placeholder="One communication">`,
+                "Leave empty if the project is not under a platform.")}
+        ${field("Sheet", `<select id="f-b">
+            ${Object.keys(A.SHEET).map(k=>`<option value="${k}"${p && p.sheet === k ? " selected" : ""}>${A.SHEET[k]}</option>`).join("")}
+          </select>`, "Which of the three roster sheets the row belongs to.")}
+        ${field("Players", `<input id="f-tp" type="number" min="0" step="1" value="${p ? p.tp : 0}">`)}
+        ${field("Promotion offer", `<select id="f-o"><option value="">Not recorded</option>
+            ${A.OSTATUS.filter(s=>s !== "Not recorded").map(s=>`<option value="${s}"${p && p.offer === s ? " selected" : ""}>${s}</option>`).join("")}
+          </select>`)}
+      </div>
+      ${field("Comment", `<textarea id="f-c" rows="2" placeholder="Anything worth remembering about this row">${esc(p ? p.comms : "")}</textarea>`)}
+      <div class="ed-sec">Bets per month</div>
+      <div class="ed-months">
+        ${L.map(lab=>`<label class="ed-m"><span>${mShort(lab)}</span>
+          <input data-m="${lab}" type="number" step="1" min="0"
+                 value="${months[lab] === null || months[lab] === undefined ? "" : months[lab]}"
+                 placeholder="—"></label>`).join("")}
+      </div>
+      <p class="ed-hint">An empty box means <b>no column for that month</b> in the source; a zero means the
+        column exists and the project took no bets. Totals, peak, months-with-bets and the activity
+        verdict are all recalculated from these boxes.</p>
+      ${listOf("dl-p", A.partnerNames())}${listOf("dl-pl", A.platformNames())}`;
+
+    openDlg(p ? `${p.partner} · ${p.name}` : "New project", html, ()=>{
+      const partner = el("f-p").value.trim(), name = el("f-j").value.trim();
+      if(!partner) return bad("A partner name is needed.");
+      if(!name) return bad("A project name is needed.");
+      const k = PD.rowKey(partner, name);
+      if(!p && A.find(k)) return bad("That partner already has a project with this name.");
+
+      const m = {};
+      dBody.querySelectorAll("[data-m]").forEach(i=>{
+        const v = i.value.trim();
+        m[i.dataset.m] = v === "" ? null : num(v);
+      });
+      const patch = {
+        pl: el("f-pl").value.trim(),
+        b: el("f-b").value,
+        tp: Math.max(0, Math.round(num(el("f-tp").value))),
+        o: el("f-o").value,
+        c: el("f-c").value.trim(),
+        m,
+      };
+      const addIdx = PD.edits.add.findIndex(a=>PD.rowKey(a.p, a.j) === k);
+      if(addIdx >= 0){
+        /* a row that was added on the board: it holds all of its own fields */
+        PD.edits.add[addIdx] = Object.assign({p:partner, j:name}, patch);
+      } else if(p){
+        /* an existing row: record only what actually differs from the file,
+           so the change list reads honestly and a re-saved field disappears again */
+        const src = PD.base.rows.find(r=>PD.rowKey(r.p, r.j) === k) || {};
+        const was = {pl: src.pl || "", b: src.b, tp: src.tp || 0, o: src.o || "", c: src.c || ""};
+        const keep = Object.assign({}, PD.edits.rows[k]);
+        ["pl","b","tp","o","c"].forEach(f=>{
+          if(String(patch[f]) !== String(was[f])) keep[f] = patch[f]; else delete keep[f];
+        });
+        const mDiff = {};
+        L.forEach((lab,i)=>{
+          const before = src.m ? src.m[i] : null;
+          const after = patch.m[lab];
+          const same = (before === null || before === undefined)
+            ? (after === null || after === undefined)
+            : (after !== null && after !== undefined && +after === +before);
+          if(!same) mDiff[lab] = after;
+        });
+        if(Object.keys(mDiff).length) keep.m = mDiff; else delete keep.m;
+        if(Object.keys(keep).length) PD.edits.rows[k] = keep; else delete PD.edits.rows[k];
+        PD.edits.del = PD.edits.del.filter(d=>d !== k);
+      } else {
+        PD.edits.add.push(Object.assign({p:partner, j:name}, patch));
+      }
+      PD.commit();
+    }, p ? ()=>{
+      if(!confirm(`Remove ${p.partner} · ${p.name} from the board?\n\nThe row stays in the file until you export and merge.`)) return;
+      const k = p.rowKey;
+      PD.edits.add = PD.edits.add.filter(a=>PD.rowKey(a.p, a.j) !== k);
+      delete PD.edits.rows[k];
+      if(!PD.edits.del.includes(k)) PD.edits.del.push(k);
+      PD.commit();
+    } : null);
+  }
+
+  /* ============ 5. the placement ============ */
+  const iso = d => d instanceof Date && !isNaN(d)
+    ? `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}` : "";
+  const dmyOf = s => { if(!s) return ""; const [y,m,d] = s.split("-"); return `${d}.${m}.${y}`; };
+
+  function discForm(key){
+    const d = key ? A.findDisc(key) : null;
+    const html = `
+      <div class="ed-grid">
+        ${field("Partner", `<input id="g-p" list="dl-p2" value="${esc(d ? d.partner : "")}" placeholder="Softgamings">`)}
+        ${field("Project", `<input id="g-j" list="dl-j2" value="${esc(d ? d.project : "")}" placeholder="Championslot">`)}
+        ${field("Game", `<input id="g-g" list="dl-g2" value="${esc(d ? d.game : "")}" placeholder="Tower Rush">`)}
+        ${field("Lobby position", `<input id="g-pos" value="${esc(d ? d.pos : "")}" placeholder="7 or 25-35">`,
+                "Text, so a range is fine.")}
+        ${field("Discount", `<input id="g-d" type="number" min="0" max="100" step="1" value="${d ? Math.round(d.disc*100) : 30}">`, "Per cent.")}
+        ${field("Starts", `<input id="g-s" type="date" value="${d ? iso(d.start) : ""}">`)}
+        ${field("Ends", `<input id="g-e" type="date" value="${d ? iso(d.end) : ""}">`)}
+      </div>
+      ${listOf("dl-p2", A.partnerNames())}${listOf("dl-j2", A.projectNames(""))}${listOf("dl-g2", A.gameNames())}`;
+
+    openDlg(d ? `${d.game} · ${d.partner}` : "New placement", html, ()=>{
+      const rec = {
+        p: el("g-p").value.trim(), j: el("g-j").value.trim(), g: el("g-g").value.trim(),
+        pos: el("g-pos").value.trim(), d: Math.max(0, num(el("g-d").value))/100,
+        s: dmyOf(el("g-s").value), e: dmyOf(el("g-e").value),
+      };
+      if(!rec.p) return bad("A partner is needed.");
+      if(!rec.g) return bad("A game is needed.");
+      if(!rec.s || !rec.e) return bad("Both dates are needed.");
+      if(dmy(rec.e) < dmy(rec.s)) return bad("The end date is before the start date.");
+      if(d){
+        PD.edits.disc.edit[d.key] = rec;
+      } else {
+        PD.edits.disc.add.push(rec);
+      }
+      PD.commit();
+    }, d ? ()=>{
+      if(!confirm(`Remove the ${d.game} placement?`)) return;
+      PD.edits.disc.add = PD.edits.disc.add.filter(x=>PD.discKey(x) !== d.key);
+      delete PD.edits.disc.edit[d.key];
+      if(!PD.edits.disc.del.includes(d.key)) PD.edits.disc.del.push(d.key);
+      PD.commit();
+    } : null);
+  }
+  const dmy = s => { const [d,m,y] = String(s).split("."); return new Date(+y, +m-1, +d); };
+
+  /* ============ 6. clicks ============ */
+  const addRowBtn = el("ed-add-row"), addDiscBtn = el("ed-add-disc");
+  if(addRowBtn) addRowBtn.addEventListener("click", ()=>rowForm(null));
+  if(addDiscBtn) addDiscBtn.addEventListener("click", ()=>discForm(null));
+
+  document.addEventListener("click", e=>{
+    if(!on) return;
+    if(e.target.closest(".ed-modal, .ed-bar, .rv, .rv-bar")) return;
+    const disc = e.target.closest("tr[data-disc]");
+    if(disc){ e.preventDefault(); e.stopPropagation(); discForm(disc.dataset.disc); return; }
+    const row = e.target.closest("[data-row]");
+    if(row){ e.preventDefault(); e.stopPropagation(); rowForm(row.dataset.row); }
+  }, true);
+
+  /* ============ 7. changes, and the road back to the file ============ */
+  function changeList(){
+    const e = PD.edits, out = [];
+    Object.keys(e.rows).forEach(k=>{
+      const p = A.find(k);
+      const fields = Object.keys(e.rows[k]).map(f=>{
+        if(f === "m") { const n = Object.keys(e.rows[k].m).length;
+          return `bets in ${n} month${n === 1 ? "" : "s"}`; }
+        return {pl:"platform", b:"sheet", tp:"players", o:"offer", c:"comment"}[f] || f;
+      });
+      out.push({t:"row", k, what: p ? `${p.partner} · ${p.name}` : k.replace("‣", " · "),
+                how: fields.join(", ")});
+    });
+    e.add.forEach(a=>out.push({t:"add", k:PD.rowKey(a.p, a.j), what:`${a.p} · ${a.j}`, how:"new project"}));
+    e.del.forEach(k=>out.push({t:"del", k, what:k.replace("‣", " · "), how:"removed"}));
+    e.disc.add.forEach(d=>out.push({t:"dadd", k:PD.discKey(d), what:`${d.g} · ${d.p}`, how:"new placement"}));
+    Object.keys(e.disc.edit).forEach(k=>out.push({t:"dedit", k,
+      what:`${e.disc.edit[k].g} · ${e.disc.edit[k].p}`, how:"placement changed"}));
+    e.disc.del.forEach(k=>out.push({t:"ddel", k, what:k.split("‣").slice(0,3).filter(Boolean).join(" · "),
+      how:"placement removed"}));
+    return out;
+  }
+
+  function revert(item){
+    const e = PD.edits;
+    if(item.t === "row") delete e.rows[item.k];
+    if(item.t === "add") e.add = e.add.filter(a=>PD.rowKey(a.p, a.j) !== item.k);
+    if(item.t === "del") e.del = e.del.filter(k=>k !== item.k);
+    if(item.t === "dadd") e.disc.add = e.disc.add.filter(d=>PD.discKey(d) !== item.k);
+    if(item.t === "dedit") delete e.disc.edit[item.k];
+    if(item.t === "ddel") e.disc.del = e.disc.del.filter(k=>k !== item.k);
+    PD.commit();
+  }
+
+  function changesDlg(){
+    const items = changeList();
+    const src = PD.importedAs
+      ? `Base data: <b>${esc(PD.importedAs.name)}</b>, imported ${new Date(PD.importedAs.at).toLocaleString("en-GB")}
+         (${PD.importedAs.rows} rows). <button class="lnk" id="ed-unbase">use the built-in file instead</button>`
+      : `Base data: the file this page was built with.`;
+    const html = `
+      <p class="ed-src">${src}</p>
+      ${items.length ? `<div class="ed-list">${items.map((it,i)=>`
+        <div class="ed-item"><span class="ed-tag" data-t="${it.t}"></span>
+          <span class="ed-what"><b>${esc(it.what)}</b><em>${esc(it.how)}</em></span>
+          <button class="lnk" data-rev="${i}">undo</button></div>`).join("")}</div>`
+        : `<p class="empty">Nothing has been entered on the board yet.</p>`}
+      <div class="ed-sec">Send these back to the file</div>
+      <div class="ed-btns">
+        <button class="btn primary" id="ed-x-xlsx">Download .xlsx</button>
+        <button class="btn" id="ed-x-json">Download partners.json</button>
+        <button class="btn" id="ed-x-csv">Download the changed rows (.csv)</button>
+      </div>
+      <p class="ed-hint">The <b>.xlsx</b> comes out with the same sheets as Partners List — Active Partners,
+        Low Activity, No Activity, Network Promotion offer, Promotional Discounts and Source — so it can replace
+        the file or be pasted into it. <b>partners.json</b> is what the published page reads: drop it into
+        <code>data/</code> in the repository and the page rebuilds itself.</p>
+      <div class="ed-sec">Bring a newer file in</div>
+      <div class="ed-btns">
+        <label class="btn" for="ed-file">Choose a file…</label>
+        <input type="file" id="ed-file" accept=".xlsx,.json" hidden>
+        ${items.length ? `<button class="btn danger" id="ed-clear">Discard all ${items.length} change${items.length===1?"":"s"}</button>` : ""}
+      </div>
+      <p class="ed-hint">An <b>.xlsx</b> or a <b>partners.json</b> becomes the new base for this browser, and
+        anything in the list above stays on top of it. Nothing is uploaded anywhere — the file is read here.</p>`;
+
+    openDlg("Changes on this board", html, null);
+    dlg.querySelector('[data-act="save"]').hidden = true;
+    dlg.querySelector('[data-act="cancel"]').textContent = "Close";
+
+    dBody.querySelectorAll("[data-rev]").forEach(b=>
+      b.addEventListener("click", ()=>revert(items[+b.dataset.rev])));
+    const unbase = el("ed-unbase");
+    if(unbase) unbase.addEventListener("click", ()=>{
+      if(confirm("Go back to the file this page was built with?\nYour entries are kept.")) PD.clearBase();
+    });
+    const clear = el("ed-clear");
+    if(clear) clear.addEventListener("click", ()=>{
+      if(confirm(`Discard all ${items.length} change(s)? This cannot be undone.`)) PD.reset();
+    });
+    el("ed-x-json").addEventListener("click", ()=>exportJSON());
+    el("ed-x-csv").addEventListener("click", ()=>exportCSV());
+    el("ed-x-xlsx").addEventListener("click", ()=>exportXLSX());
+    el("ed-file").addEventListener("change", ev=>{
+      const f = ev.target.files && ev.target.files[0];
+      if(f) importFile(f);
+    });
+  }
+  el("ed-changes").addEventListener("click", ()=>{
+    dlg.querySelector('[data-act="save"]').hidden = false;
+    dlg.querySelector('[data-act="cancel"]').textContent = "Cancel";
+    changesDlg();
+  });
+
+  /* ---------- current dataset, base + entries ---------- */
+  const current = () => PD.apply(PD.base, PD.edits);
+
+  /* Published as an artifact, a page cannot hand over a file by itself — the viewer's
+     save goes through the downloads capability. On GitHub Pages there is no such host,
+     and the ordinary link is the way. Try the host first, fall back to the link. */
+  let DOWN;
+  async function dl(name, blob){
+    if(DOWN === undefined){
+      try { DOWN = (window.claude && claude.use) ? await claude.use("downloads") : null; }
+      catch(e){ DOWN = null; }
+    }
+    if(DOWN){
+      try { await DOWN.save({filename:name, data:blob}); say(`${name} saved.`); return; }
+      catch(err){
+        if(err && err.code === "declined"){ say("Save cancelled."); return; }
+        /* anything else: fall through to the plain link */
+      }
+    }
+    const u = URL.createObjectURL(blob), a = document.createElement("a");
+    a.href = u; a.download = name; document.body.appendChild(a); a.click();
+    setTimeout(()=>{ URL.revokeObjectURL(u); a.remove(); }, 400);
+    say(`${name} downloaded.`);
+  }
+
+  function exportJSON(){
+    const d = current();
+    ["rows","disc"].forEach(k=>d[k].forEach(r=>{ delete r.edited; delete r.added; }));
+    dl("partners.json", new Blob([JSON.stringify(d)], {type:"application/json"}));
+  }
+
+  const csvCell = v => {
+    const s = String(v == null ? "" : v);
+    return /[",\n;]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+  };
+  const csv = rows => "﻿" + rows.map(r=>r.map(csvCell).join(",")).join("\r\n");
+
+  function exportCSV(){
+    const d = current();
+    const touched = d.rows.filter(r=>r.edited || r.added);
+    const rows = [["Partner","Platform","Project","Sheet","Players","Offer","Comment",
+                   ...L.map(mShort), "Total bets"]];
+    (touched.length ? touched : d.rows).forEach(r=>rows.push([
+      r.p, r.pl, r.j, A.SHEET[r.b] || r.b, r.tp, r.o, r.c,
+      ...r.m.map(v=>v === null || v === undefined ? "" : v), r.tb]));
+    dl(touched.length ? "changed-rows.csv" : "all-rows.csv",
+       new Blob([csv(rows)], {type:"text/csv;charset=utf-8"}));
+  }
+
+  /* ---------- .xlsx, written by hand: a zip of XML, stored, no library ---------- */
+  const CRC = (()=>{ const t = new Uint32Array(256);
+    for(let n = 0; n < 256; n++){ let c = n;
+      for(let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1;
+      t[n] = c >>> 0; }
+    return b => { let c = 0xFFFFFFFF;
+      for(let i = 0; i < b.length; i++) c = t[(c ^ b[i]) & 0xFF] ^ (c >>> 8);
+      return (c ^ 0xFFFFFFFF) >>> 0; };
+  })();
+
+  function zip(files){                 // [{name, data:Uint8Array}] -> Blob
+    const enc = new TextEncoder(), parts = [], central = [];
+    let off = 0;
+    const u16 = n => [n & 255, (n >>> 8) & 255];
+    const u32 = n => [n & 255, (n >>> 8) & 255, (n >>> 16) & 255, (n >>> 24) & 255];
+    files.forEach(f=>{
+      const name = enc.encode(f.name), crc = CRC(f.data), len = f.data.length;
+      const head = new Uint8Array([...u32(0x04034b50), ...u16(20), ...u16(0), ...u16(0),
+        ...u16(0), ...u16(0), ...u32(crc), ...u32(len), ...u32(len),
+        ...u16(name.length), ...u16(0)]);
+      parts.push(head, name, f.data);
+      central.push(new Uint8Array([...u32(0x02014b50), ...u16(20), ...u16(20), ...u16(0),
+        ...u16(0), ...u16(0), ...u16(0), ...u32(crc), ...u32(len), ...u32(len),
+        ...u16(name.length), ...u16(0), ...u16(0), ...u16(0), ...u16(0), ...u32(0), ...u32(off)]),
+        name);   // the entry name belongs to the central record too
+      off += head.length + name.length + len;
+    });
+    const cSize = central.reduce((a,b)=>a + b.length, 0);
+    const end = new Uint8Array([...u32(0x06054b50), ...u16(0), ...u16(0),
+      ...u16(files.length), ...u16(files.length), ...u32(cSize), ...u32(off), ...u16(0)]);
+    return new Blob([...parts, ...central, end], {type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
+  }
+
+  const xesc = s => String(s == null ? "" : s)
+    .replace(/[&<>]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]))
+    .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, "");
+  const colName = i => { let s = "", n = i + 1;
+    while(n > 0){ const r = (n - 1) % 26; s = String.fromCharCode(65 + r) + s; n = Math.floor((n - 1)/26); }
+    return s; };
+
+  function sheetXML(rows){
+    const body = rows.map((r,ri)=>{
+      const cells = r.map((v,ci)=>{
+        const ref = colName(ci) + (ri + 1);
+        if(v === null || v === undefined || v === "") return "";
+        if(typeof v === "number" && isFinite(v)) return `<c r="${ref}"><v>${v}</v></c>`;
+        return `<c r="${ref}" t="inlineStr"><is><t xml:space="preserve">${xesc(v)}</t></is></c>`;
+      }).join("");
+      return `<row r="${ri + 1}">${cells}</row>`;
+    }).join("");
+    return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetData>${body}</sheetData></worksheet>`;
+  }
+
+  function exportXLSX(){
+    const d = current();
+    const head = ["Partner","Platform","Project","Players","Partner Manager","Comment"];
+    const sheetRows = b => [head, ...d.rows.filter(r=>r.b === b).map(r=>[r.p, r.pl, r.j, r.tp, "", r.c])];
+    const offers = [["Partner","Platform","Project","Status","Comment"],
+      ...d.rows.filter(r=>r.o).map(r=>[r.p, r.pl, r.j, r.o, r.c])];
+    const disc = [["Partner","Project","Game","Position","Discount","Start","End"],
+      ...d.disc.map(x=>[x.p, x.j, x.g, x.pos, x.d, x.s, x.e])];
+    const source = [["Partner","Project", ...L, "Turnover","GGR"],
+      ...d.rows.map(r=>[r.p, r.j, ...r.m.map(v=>v === null || v === undefined ? "" : v), r.amt, r.ggr])];
+
+    const sheets = [
+      ["Active Partners", sheetRows("active")],
+      ["Low Activity", sheetRows("low")],
+      ["No Activity", sheetRows("none")],
+      ["Network Promotion offer", offers],
+      ["Promotional Discounts", disc],
+      ["Source", source],
+    ];
+    const enc = new TextEncoder();
+    const files = [
+      {name:"[Content_Types].xml", data: enc.encode(
+        `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
+<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
+<Default Extension="xml" ContentType="application/xml"/>
+<Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>
+${sheets.map((s,i)=>`<Override PartName="/xl/worksheets/sheet${i+1}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>`).join("")}
+</Types>`)},
+      {name:"_rels/.rels", data: enc.encode(
+        `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/>
+</Relationships>`)},
+      {name:"xl/workbook.xml", data: enc.encode(
+        `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"
+ xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>
+${sheets.map((s,i)=>`<sheet name="${xesc(s[0])}" sheetId="${i+1}" r:id="rId${i+1}"/>`).join("")}
+</sheets></workbook>`)},
+      {name:"xl/_rels/workbook.xml.rels", data: enc.encode(
+        `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+${sheets.map((s,i)=>`<Relationship Id="rId${i+1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet${i+1}.xml"/>`).join("")}
+</Relationships>`)},
+      ...sheets.map((s,i)=>({name:`xl/worksheets/sheet${i+1}.xml`, data: enc.encode(sheetXML(s[1]))})),
+    ];
+    const stamp = new Date().toISOString().slice(0,10);
+    dl(`Partners List ${stamp}.xlsx`, zip(files));
+  }
+
+  /* ---------- reading a file back in ---------- */
+  async function unzip(buf){
+    const dv = new DataView(buf), u8 = new Uint8Array(buf);
+    let end = -1;
+    for(let i = u8.length - 22; i >= 0 && i > u8.length - 66000; i--){
+      if(dv.getUint32(i, true) === 0x06054b50){ end = i; break; }
+    }
+    if(end < 0) throw new Error("not a zip file");
+    const n = dv.getUint16(end + 10, true);
+    let p = dv.getUint32(end + 16, true);
+    const out = {};
+    for(let i = 0; i < n; i++){
+      const nameLen = dv.getUint16(p + 28, true), extraLen = dv.getUint16(p + 30, true);
+      const cmtLen = dv.getUint16(p + 32, true), method = dv.getUint16(p + 10, true);
+      const local = dv.getUint32(p + 42, true), size = dv.getUint32(p + 20, true);
+      const name = new TextDecoder().decode(u8.subarray(p + 46, p + 46 + nameLen));
+      const lNameLen = dv.getUint16(local + 26, true), lExtraLen = dv.getUint16(local + 28, true);
+      const start = local + 30 + lNameLen + lExtraLen;
+      const raw = u8.subarray(start, start + size);
+      if(method === 0) out[name] = raw;
+      else if(method === 8){
+        if(typeof DecompressionStream !== "function")
+          throw new Error("this browser cannot unpack .xlsx — save the sheet as .csv, or import partners.json");
+        const ds = new DecompressionStream("deflate-raw");
+        out[name] = new Uint8Array(await new Response(new Blob([raw]).stream().pipeThrough(ds)).arrayBuffer());
+      } else throw new Error("unsupported compression in the workbook");
+      p += 46 + nameLen + extraLen + cmtLen;
+    }
+    return out;
+  }
+
+  const HEAD = {
+    partner:["partner","partner name","partners"], platform:["platform","platform name"],
+    project:["project","project name","brand"], players:["players","total players","player count"],
+    comment:["comment","comments","note","notes"],
+    status:["status","offer status","promotion status","network promotion"],
+    turnover:["turnover","amount","bet amount","total amount"], ggr:["ggr","gross gaming revenue"],
+    game:["game","game name"], position:["position","lobby position","pos"],
+    discount:["discount","discount %","rate"], start:["start","start date","from"],
+    end:["end","end date","to"],
+  };
+  const nrm = v => String(v == null ? "" : v).replace(/\s+/g," ").trim();
+  const monthLabel = v => {
+    const s = nrm(v).toLowerCase();
+    let m = /^(20\d\d)[-\/. ]?(0[1-9]|1[0-2])$/.exec(s);
+    if(m) return `${m[1]}-${m[2]}`;
+    m = /^([a-z]+)[\s'\-]*(\d{2,4})$/.exec(s);
+    if(m){
+      const names = ["january","february","march","april","may","june","july","august",
+                     "september","october","november","december"];
+      const i = names.findIndex(x=>x.startsWith(m[1].slice(0,3)));
+      if(i >= 0){ let y = +m[2]; if(y < 100) y += 2000; return `${y}-${String(i+1).padStart(2,"0")}`; }
+    }
+    return null;
+  };
+
+  function sheetRowsFromXML(xml, shared){
+    const doc = new DOMParser().parseFromString(xml, "application/xml");
+    const out = [];
+    doc.querySelectorAll("row").forEach(r=>{
+      const cells = [];
+      r.querySelectorAll("c").forEach(c=>{
+        const ref = c.getAttribute("r") || "";
+        const letters = ref.replace(/\d+/g, "");
+        let idx = 0;
+        for(let i = 0; i < letters.length; i++) idx = idx*26 + (letters.charCodeAt(i) - 64);
+        idx = Math.max(0, idx - 1);
+        const t = c.getAttribute("t");
+        let v = "";
+        if(t === "inlineStr"){ const n = c.querySelector("is t"); v = n ? n.textContent : ""; }
+        else { const n = c.querySelector("v"); v = n ? n.textContent : "";
+               if(t === "s") v = shared[+v] != null ? shared[+v] : ""; }
+        cells[idx] = v;
+      });
+      out.push(cells);
+    });
+    return out;
+  }
+
+  function headerMap(row){
+    const seen = (row || []).map(c=>nrm(c).toLowerCase());
+    const map = {};
+    Object.keys(HEAD).forEach(f=>{
+      for(const nm of HEAD[f]){ const i = seen.indexOf(nm); if(i >= 0){ map[f] = i; break; } }
+    });
+    return map;
+  }
+  function findHeader(rows, need){
+    for(let i = 0; i < Math.min(8, rows.length); i++){
+      const m = headerMap(rows[i]);
+      if(need.every(f=>f in m)) return {i, m};
+    }
+    return null;
+  }
+
+  function datasetFromSheets(sheets){
+    const ROSTER = {"Active Partners":"active", "Low Activity":"low", "No Activity":"none"};
+    const labels = [];
+    const betCols = {};
+    ["Source","Source 2"].forEach((nm,si)=>{
+      const rows = sheets[nm]; if(!rows) return;
+      const h = findHeader(rows, ["partner"]); if(!h) return;
+      const cols = {};
+      (rows[h.i] || []).forEach((c,i)=>{ const lab = monthLabel(c);
+        if(lab){ cols[lab] = i; if(!labels.includes(lab)) labels.push(lab); } });
+      betCols[nm] = {h, cols, src: si + 1};
+    });
+    labels.sort();
+    if(!labels.length) throw new Error("no month columns found on Source / Source 2");
+
+    const bets = {};
+    Object.keys(betCols).forEach(nm=>{
+      const {h, cols, src} = betCols[nm], rows = sheets[nm];
+      const pi = h.m.partner, ji = "project" in h.m ? h.m.project : h.m.platform;
+      for(let i = h.i + 1; i < rows.length; i++){
+        const r = rows[i] || [];
+        const p = nrm(r[pi]), j = nrm(r[ji]);
+        if(!p && !j) continue;
+        const rec = {m: labels.map(l=>l in cols ? (r[cols[l]] === "" || r[cols[l]] == null ? null : +r[cols[l]] || 0) : null),
+                     amt: +nrm(r[h.m.turnover]) || 0, ggr: +nrm(r[h.m.ggr]) || 0, src};
+        bets[(p + "|" + j).toLowerCase()] = rec;
+        const k2 = ("|" + j).toLowerCase();
+        if(!(k2 in bets)) bets[k2] = rec;
+      }
+    });
+
+    const offers = {};
+    const os = sheets["Network Promotion offer"];
+    if(os){
+      const h = findHeader(os, ["partner"]);
+      if(h && "status" in h.m){
+        for(let i = h.i + 1; i < os.length; i++){
+          const r = os[i] || [], p = nrm(r[h.m.partner]);
+          const j = nrm(r["project" in h.m ? h.m.project : h.m.partner]);
+          if(p || j) offers[(p + "|" + j).toLowerCase()] = nrm(r[h.m.status]);
+        }
+      }
+    }
+
+    const disc = [];
+    const ds = sheets["Promotional Discounts"];
+    if(ds){
+      const h = findHeader(ds, ["partner"]);
+      if(h) for(let i = h.i + 1; i < ds.length; i++){
+        const r = ds[i] || [], g = f => f in h.m ? nrm(r[h.m[f]]) : "";
+        if(!g("partner")) continue;
+        disc.push({p:g("partner"), j:g("project"), g:g("game"), pos:g("position"),
+                   d: (parseFloat(g("discount")) || 0) > 1 ? parseFloat(g("discount"))/100 : parseFloat(g("discount")) || 0,
+                   s:g("start"), e:g("end")});
+      }
+    }
+
+    const out = [];
+    Object.keys(ROSTER).forEach(nm=>{
+      const rows = sheets[nm]; if(!rows) return;
+      const h = findHeader(rows, ["partner"]); if(!h) return;
+      for(let i = h.i + 1; i < rows.length; i++){
+        const r = rows[i] || [], g = f => f in h.m ? nrm(r[h.m[f]]) : "";
+        const p = g("partner"), pl = g("platform"), j = g("project") || pl || p;
+        if(!p && !j) continue;
+        const b = bets[(p + "|" + j).toLowerCase()] || bets[("|" + j).toLowerCase()] || {};
+        const rec = {p, pl, j, b: ROSTER[nm], o: offers[(p + "|" + j).toLowerCase()] || "",
+          c: g("comment"), m: b.m ? b.m.slice() : labels.map(()=>0),
+          tp: parseInt(g("players"), 10) || 0, amt: b.amt || 0, ggr: b.ggr || 0, src: b.src || 0};
+        PD.derive(rec);
+        out.push(rec);
+      }
+    });
+    if(!out.length) throw new Error("no rows found on Active Partners / Low Activity / No Activity");
+    return {labels, rows: out, disc, issues: []};
+  }
+
+  async function importFile(file){
+    say("Reading " + file.name + " …");
+    try {
+      if(/\.json$/i.test(file.name)){
+        const d = JSON.parse(await file.text());
+        if(!d.labels || !d.rows) throw new Error("this JSON is not a partners.json");
+        PD.setBase(file.name, d);
+        return;
+      }
+      const files = await unzip(await file.arrayBuffer());
+      const dec = new TextDecoder();
+      const wb = new DOMParser().parseFromString(dec.decode(files["xl/workbook.xml"]), "application/xml");
+      const rels = new DOMParser().parseFromString(dec.decode(files["xl/_rels/workbook.xml.rels"]), "application/xml");
+      const target = {};
+      rels.querySelectorAll("Relationship").forEach(r=>{
+        target[r.getAttribute("Id")] = r.getAttribute("Target").replace(/^\/?xl\//, "");
+      });
+      let shared = [];
+      if(files["xl/sharedStrings.xml"]){
+        const sx = new DOMParser().parseFromString(dec.decode(files["xl/sharedStrings.xml"]), "application/xml");
+        shared = [...sx.querySelectorAll("si")].map(si=>
+          [...si.querySelectorAll("t")].map(t=>t.textContent).join(""));
+      }
+      const sheets = {};
+      wb.querySelectorAll("sheet").forEach(s=>{
+        const id = s.getAttributeNS("http://schemas.openxmlformats.org/officeDocument/2006/relationships", "id")
+                || s.getAttribute("r:id");
+        const path = "xl/" + (target[id] || "");
+        if(files[path]) sheets[s.getAttribute("name")] = sheetRowsFromXML(dec.decode(files[path]), shared);
+      });
+      PD.setBase(file.name, datasetFromSheets(sheets));
+    } catch(err){
+      console.error(err);
+      alert("Could not read that file.\n\n" + (err && err.message ? err.message : err) +
+            "\n\nWhat works: the Partners List workbook (.xlsx) or a partners.json exported from this board.");
+    }
+  }
+
+  paint();
+})();
 </script>
-</body>
-</html>
+</body></html>
