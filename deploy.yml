@@ -1,0 +1,65 @@
+name: Build and deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  # Uncomment once the data comes from Google Sheets — rebuilds every
+  # weekday morning at 07:00 UTC so the page follows the sheet.
+  # schedule:
+  #   - cron: "0 7 * * 1-5"
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install openpyxl requests
+
+      # Refresh the data from Google Sheets before building.
+      # Enable this once PARTNERS_SHEET_ID is set as a repository variable
+      # (Settings > Secrets and variables > Actions > Variables) and, for a
+      # private sheet, GOOGLE_SERVICE_ACCOUNT_JSON as a secret.
+      # - name: Refresh data from Google Sheets
+      #   env:
+      #     PARTNERS_SHEET_ID: ${{ vars.PARTNERS_SHEET_ID }}
+      #     GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+      #   run: python scripts/sheets_to_json.py
+
+      - name: Build index.html
+        run: python build.py
+
+      - name: Check the page is not empty
+        run: |
+          test -s index.html
+          grep -q 'id="pdata"' index.html
+          grep -q -- '__PDATA__' index.html && { echo "placeholder was not substituted"; exit 1; } || true
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

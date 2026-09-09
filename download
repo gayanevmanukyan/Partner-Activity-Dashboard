@@ -1,0 +1,27 @@
+# The workbook itself — commercial data, keep it out of the repo.
+*.xlsx
+*.xls
+*.csv
+
+# Google service-account keys. Never commit these.
+*service-account*.json
+credentials.json
+key.json
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Editors and OS
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# Local build output. Remove this line if you prefer to commit index.html
+# instead of building it in CI — see README.
+# index.html
